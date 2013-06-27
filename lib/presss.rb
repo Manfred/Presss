@@ -1,0 +1,2 @@
+class Presss
+end
