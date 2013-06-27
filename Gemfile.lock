@@ -1,0 +1,9 @@
+GEM
+  specs:
+    peck (0.2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  peck
