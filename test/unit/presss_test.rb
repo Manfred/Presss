@@ -30,6 +30,7 @@ describe Presss, "with a valid configuration" do
     request.path.should == '/wads/df45ui67.zip'
     headers['date'][0].should.start_with(Time.now.rfc2822[0,20])
     headers['authorization'][0].should.start_with('AWS')
+    headers['content-type'].should.be.nil
   end
 
   it "sends the correct request for a put" do
@@ -45,6 +46,17 @@ describe Presss, "with a valid configuration" do
     request.body.should == body
     headers['date'][0].should.start_with(Time.now.rfc2822[0,20])
     headers['authorization'][0].should.start_with('AWS')
+    headers['content-type'].should.be.nil
+  end
+
+  it "uses the optional content type when putting an object" do
+    content_type = 'application/zip'
+    body = fixture_file('wads/df45ui67.zip')
+    Presss.put('wads/df45ui67.zip', body, content_type)
+    request = Net::FakeHTTP.requests.last
+    # Don't like this, but unfortunately Net::HTTP is really closed
+    headers = request.instance_eval { @header }
+    headers['content-type'][0].should == content_type
   end
 
   it "gets the contents of a file" do

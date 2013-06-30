@@ -5,6 +5,8 @@ require 'openssl'
 require 'base64'
 
 class Presss
+  # Computes the Authorization header for a AWS request based on a message,
+  # the access key ID and secret access key.
   class Authorization
     attr_accessor :access_key_id, :secret_access_key
 
@@ -12,10 +14,12 @@ class Presss
       @access_key_id, @secret_access_key = access_key_id, secret_access_key
     end
 
+    # Returns the value for the Authorization header for a message contents.
     def header(string)
       'AWS ' + access_key_id + ':' + sign(string)
     end
 
+    # Returns a signature for a AWS request message.
     def sign(string)
       Base64.encode64(hmac_sha1(string)).strip
     end
@@ -53,18 +57,23 @@ class Presss
       @config = config
     end
 
+    # Returns the configured bucket name.
     def bucket_name
       config[:bucket_name]
     end
 
+    # Returns the AWS hostname based on the configured bucket name.
     def host
       bucket_name + '.' + self.class.host
     end
 
+    # Returns the absolute path based on the key for the object.
     def absolute_path(path)
       path.start_with?('/') ? path : '/' + path
     end
 
+    # Returns the canonicalized resource used in the authorization
+    # signature for an absolute path to an object.
     def canonicalized_resource(absolute_path)
       if bucket_name.nil?
         raise ArgumentError, "Please configure a bucket_name: Presss.config = { bucket_name: 'my-bucket-name }"
@@ -73,6 +82,8 @@ class Presss
       end
     end
 
+    # Returns a Presss::Authorization instance for the configured
+    # AWS credentials.
     def authorization
       @authorization ||= Presss::Authorization.new(
         config[:access_key_id],
@@ -80,17 +91,19 @@ class Presss
       )
     end
 
+    # Returns the request headers for a date, message and content-type.
     def headers(date, message, content_type=nil)
       headers = {
         'Authorization' => authorization.header(message),
-        'Date' => date
+        'Date' => date,
+        'User-Agent' => 'Press/0.9'
       }
-      if content_type
-        headers['Content-Type'] = content_type
-      end
+      headers['Content-Type'] = content_type if content_type
       headers
     end
 
+    # Returns a Net::HTTP instance with the correct SSL configuration for a
+    # request.
     def http
       @http ||= begin
         http = Net::HTTP.new(host, self.class.port)
@@ -101,6 +114,8 @@ class Presss
       end
     end
 
+    # Joins a number of parameters for a valid request message used to compute
+    # the request signature.
     def join(verb, body, content_type, date, headers, absolute_path)
       [
         verb.to_s.upcase,
@@ -112,6 +127,7 @@ class Presss
       ].join("\n")
     end
 
+    # Get an object with a key.
     def get(path)
       path = absolute_path(path)
       date = Time.now.rfc2822
@@ -129,7 +145,9 @@ class Presss
       end
     end
 
-    def put(path, file, content_type='application/x-download')
+    # Puts an object with a key using a file or string. Optionally pass in
+    # the content-type if you want to set a specific one.
+    def put(path, file, content_type=nil)
       path = absolute_path(path)
       body = file.respond_to?(:read) ? file.read : file.to_s
       date = Time.now.rfc2822
@@ -154,15 +172,18 @@ class Presss
   end
   self.config = {}
 
+  # Get a object with a certain key.
   def self.get(path)
     request = Presss::HTTP.new(config)
     response = request.get(path)
     response.body
   end
 
-  def self.put(path, file)
+  # Puts an object with a key using a file or string. Optionally pass in
+  # the content-type if you want to set a specific one.
+  def self.put(path, file, content_type=nil)
     request = Presss::HTTP.new(config)
-    response = request.put(path, file)
+    response = request.put(path, file, content_type)
     response.success?
   end
 end
