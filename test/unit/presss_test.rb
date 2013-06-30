@@ -46,7 +46,7 @@ describe Presss, "with a valid configuration" do
     request.body.should == body
     headers['date'][0].should.start_with(Time.now.rfc2822[0,20])
     headers['authorization'][0].should.start_with('AWS')
-    headers['content-type'].should.be.nil
+    headers['content-type'][0].should == 'application/x-download'
   end
 
   it "uses the optional content type when putting an object" do

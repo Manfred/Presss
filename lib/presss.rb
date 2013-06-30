@@ -169,21 +169,34 @@ class Presss
 
   class << self
     attr_accessor :config
+    attr_accessor :logger
   end
   self.config = {}
 
   # Get a object with a certain key.
   def self.get(path)
     request = Presss::HTTP.new(config)
+    log("Trying to GET #{path}")
     response = request.get(path)
+    log("Got response: #{response.status_code}")
     response.body
   end
 
   # Puts an object with a key using a file or string. Optionally pass in
   # the content-type if you want to set a specific one.
-  def self.put(path, file, content_type=nil)
+  def self.put(path, file, content_type='application/x-download')
     request = Presss::HTTP.new(config)
+    log("Trying to PUT #{path}")
     response = request.put(path, file, content_type)
+    log("Got response: #{response.status_code}")
+    log(response.body) unless response.success?
     response.success?
+  end
+
+  # Logs to the configured logger if a logger was configured.
+  def self.log(message)
+    if logger
+      logger.info('[Presss] ' + message)
+    end
   end
 end
