@@ -178,8 +178,12 @@ class Presss
     request = Presss::HTTP.new(config)
     log("Trying to GET #{path}")
     response = request.get(path)
-    log("Got response: #{response.status_code}")
-    response.body
+    if response.success?
+      log("Got response: #{response.status_code}")
+      response.body
+    else
+      nil
+    end
   end
 
   # Puts an object with a key using a file or string. Optionally pass in
