@@ -46,9 +46,8 @@ class Presss
     end
 
     class << self
-      attr_accessor :host, :port
+      attr_accessor :port
     end
-    self.host = 's3-external-3.amazonaws.com'
     self.port = 443
 
     attr_accessor :config
@@ -62,9 +61,22 @@ class Presss
       config[:bucket_name]
     end
 
+    def region
+      config[:region] || 'us-east-1'
+    end
+
+    def domain
+      case region
+      when 'us-east-1'
+        's3.amazonaws.com'
+      else
+        's3-%s.amazonaws.com' % region
+      end
+    end
+
     # Returns the AWS hostname based on the configured bucket name.
     def host
-      bucket_name + '.' + self.class.host
+      bucket_name + '.' + domain
     end
 
     # Returns the absolute path based on the key for the object.

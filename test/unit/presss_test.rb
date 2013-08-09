@@ -1,6 +1,10 @@
 require File.expand_path('../../preamble', __FILE__)
 
 describe Presss, "without configuration" do
+  before do
+    Presss.config = {}
+  end
+
   it "complains" do
     lambda do
       Presss.get('')
@@ -13,7 +17,8 @@ describe Presss, "with a valid configuration" do
     Presss.config = {
       bucket_name: 'press-test',
       access_key_id: 'ad76fg87',
-      secret_access_key: 'js34iu78erpo89'
+      secret_access_key: 'js34iu78erpo89',
+      region: 'eu-west-1'
     }
     # Send a blank 200 by default
     Net::FakeHTTP.next_response = nil
