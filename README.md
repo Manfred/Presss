@@ -2,6 +2,25 @@
 
 Presss uploads objects to and downloads objects from from Amazon S3. It's a tiny companion to a more complete implementation like AWS SDK.
 
+## Install
+
+You can install Presss as a Rubygem or directly from the Git repository if you prefer.
+
+## Configure
+
+You start by configuring Presss globally to use a certain bucket in a region with your credentials.
+
+	Presss.config = {
+	  region: 'eu-west-1',
+      bucket_name: 'my-bucket-name',
+      access_key_id: 'access key ID',
+      secret_access_key: 'access key secret'
+    }
+
+For valid regions see the AWS documentation. You can test if a region works by getting the hostname for it. In this example the region is `eu-west-1`.
+
+    $ host s3-eu-west-1.amazonaws.com
+
 ## Upload files
 
 The `put` method uploads anything that responds to either a `read` or `to_s` method. Currently the entire upload is stored in memory so it's not too great at uploading large files.
