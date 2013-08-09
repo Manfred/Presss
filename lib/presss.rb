@@ -120,7 +120,7 @@ class Presss
       @http ||= begin
         http = Net::HTTP.new(host, self.class.port)
         http.use_ssl = true
-        http.ca_file = File.expand_path('../../../support/cacert.pem', __FILE__)
+        http.ca_file = File.expand_path('../../support/cacert.pem', __FILE__)
         http.verify_mode = OpenSSL::SSL::VERIFY_PEER
         http
       end
