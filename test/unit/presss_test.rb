@@ -73,4 +73,8 @@ describe Presss, "with a valid configuration" do
     Net::FakeHTTP.next_response = Net::FakeHTTP::Response.new(200, {}, " ")
     Presss.put('wads/df45ui67.zip', fixture_file('wads/df45ui67.zip')).should == true
   end
+
+  it "puts a file and reads the body stream" do
+    Presss.put('wads/df45ui67.zip', File.open(fixture_file_path('wads/df45ui67.zip'))).should == true
+  end
 end

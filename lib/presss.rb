@@ -166,7 +166,13 @@ class Presss
       date = Time.now.rfc2822
       message = join('PUT', body, content_type, date, nil, path)
       request = Net::HTTP::Put.new(path, headers(date, message, content_type))
-      request.body = body
+
+      if file.respond_to?(:read)
+        request.body_stream = file
+      else
+        request.body = body
+      end
+
       begin
         response = http.start { |http| http.request(request) }
         Presss::HTTP::Response.new(
