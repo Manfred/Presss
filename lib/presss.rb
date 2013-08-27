@@ -162,10 +162,16 @@ class Presss
     # the content-type if you want to set a specific one.
     def put(path, file, content_type=nil)
       path = absolute_path(path)
-      body = file.respond_to?(:read) ? file.read : file.to_s
+      body = file.to_s unless file.respond_to?(:read)
       date = Time.now.rfc2822
       message = join('PUT', body, content_type, date, nil, path)
-      request = Net::HTTP::Put.new(path, headers(date, message, content_type))
+      headers = headers(date, message, content_type)
+
+      if file.respond_to?(:read)
+        headers.merge!({'Content-Length' => file.size.to_s})
+      end
+
+      request = Net::HTTP::Put.new(path, headers)
 
       if file.respond_to?(:read)
         request.body_stream = file
