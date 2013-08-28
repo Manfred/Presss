@@ -15,10 +15,10 @@ end
 describe Presss, "with a valid configuration" do
   before do
     Presss.config = {
-      bucket_name: 'press-test',
-      access_key_id: 'ad76fg87',
-      secret_access_key: 'js34iu78erpo89',
-      region: 'eu-west-1'
+      :bucket_name => 'press-test',
+      :access_key_id => 'ad76fg87',
+      :secret_access_key => 'js34iu78erpo89',
+      :region => 'eu-west-1'
     }
     # Send a blank 200 by default
     Net::FakeHTTP.next_response = nil

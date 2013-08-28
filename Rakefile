@@ -1,4 +1,4 @@
-task default: :test
+task :default => :test
 
 desc "Run all specs"
 task :test do

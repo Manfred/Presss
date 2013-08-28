@@ -3,9 +3,9 @@ require File.expand_path('../../preamble', __FILE__)
 describe "A", Presss::HTTP do
   before do
     Presss.config = {
-      bucket_name: 'press-test',
-      access_key_id: 'ad76fg87',
-      secret_access_key: 'js34iu78erpo89',
+      :bucket_name => 'press-test',
+      :access_key_id => 'ad76fg87',
+      :secret_access_key => 'js34iu78erpo89',
     }
     @http = Presss::HTTP.new(Presss.config)
   end
