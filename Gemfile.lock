@@ -1,10 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    peck (0.2.0)
+    peck (0.4.0)
+    rake (10.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   peck
+  rake
