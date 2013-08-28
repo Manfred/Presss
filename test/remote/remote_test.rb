@@ -31,9 +31,9 @@ if File.exist?(remote_config_file)
 else
 
   example = {
-    bucket_name: 'your-bucket-name',
-    access_key_id:  'your-access-key-id',
-    secret_access_key: 'your-secret-access-key'
+    :bucket_name => 'your-bucket-name',
+    :access_key_id =>  'your-access-key-id',
+    :secret_access_key => 'your-secret-access-key'
   }
   report("Please configure a test S3 bucket when running the remote tests:\n#{remote_config_file}\n#{example.to_yaml}")
 end
