@@ -141,18 +141,26 @@ class Presss
     end
 
     # Get an object with a key.
-    def get(path)
+    def get(path, &block)
       path = absolute_path(path)
       date = Time.now.rfc2822
       message = join('GET', nil, nil, date, nil, path)
       request = Net::HTTP::Get.new(path, headers(date, message))
       begin
-        response = http.start { |http| http.request(request) }
-        Presss::HTTP::Response.new(
-          response.code,
-          response.instance_variable_get('@header'),
-          response.body
-        )
+        if block_given?
+          http.start do |http|
+            http.request(request) do |response|
+              response.read_body(&block)
+            end
+          end
+        else
+          response = http.start { |http| http.request(request) }
+          Presss::HTTP::Response.new(
+            response.code,
+            response.instance_variable_get('@header'),
+            response.body
+          )
+        end
       rescue EOFError => error
         raise Presss::HTTP::RequestError, error.message
       end
@@ -199,15 +207,20 @@ class Presss
   self.config = {}
 
   # Get a object with a certain key.
-  def self.get(path)
+  def self.get(path, &block)
     request = Presss::HTTP.new(config)
     log("Trying to GET #{path}")
-    response = request.get(path)
-    if response.success?
-      log("Got response: #{response.status_code}")
-      response.body
+
+    if block_given?
+      request.get(path, &block)
     else
-      nil
+      response = request.get(path)
+      if response.success?
+        log("Got response: #{response.status_code}")
+        response.body
+      else
+        nil
+      end
     end
   end
 

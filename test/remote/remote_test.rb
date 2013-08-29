@@ -28,6 +28,10 @@ if File.exist?(remote_config_file)
 
   contents = Presss.get(key)
   assert(contents == 'THIS IS A ZIP')
+
+  contents = ''
+  Presss.get(key) { |segment| contents << segment }
+  assert(contents == 'THIS IS A ZIP')
 else
 
   example = {
