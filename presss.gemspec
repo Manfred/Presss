@@ -1,6 +1,8 @@
+require File.expand_path('../lib/presss', __FILE__)
+
 Gem::Specification.new do |spec|
   spec.name = 'presss'
-  spec.version = '0.9.0'
+  spec.version = Presss::VERSION
 
   spec.author = "Manfred Stienstra"
   spec.email = "manfred@fngtps.com"

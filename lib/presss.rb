@@ -6,6 +6,8 @@ require 'openssl'
 require 'base64'
 
 class Presss
+  VERSION = '0.10.0'
+
   # Computes the Authorization header for a AWS request based on a message,
   # the access key ID and secret access key.
   class Authorization
