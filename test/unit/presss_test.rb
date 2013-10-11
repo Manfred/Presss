@@ -32,7 +32,7 @@ describe Presss, "with a valid configuration" do
     headers = request.instance_eval { @header }
 
     request.should.be.kind_of(Net::HTTP::Get)
-    request.path.should == '/wads/df45ui67.zip'
+    request.path.should == '/press-test/wads/df45ui67.zip'
     headers['date'][0].should.start_with(Time.now.rfc2822[0,20])
     headers['authorization'][0].should.start_with('AWS')
     headers['content-type'].should.be.nil
@@ -47,7 +47,7 @@ describe Presss, "with a valid configuration" do
     headers = request.instance_eval { @header }
 
     request.should.be.kind_of(Net::HTTP::Put)
-    request.path.should == '/wads/df45ui67.zip'
+    request.path.should == '/press-test/wads/df45ui67.zip'
     request.body.should == body
     headers['date'][0].should.start_with(Time.now.rfc2822[0,20])
     headers['authorization'][0].should.start_with('AWS')

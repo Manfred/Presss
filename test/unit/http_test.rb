@@ -11,10 +11,10 @@ describe "A", Presss::HTTP do
   end
 
   it "uses the correct domain" do
-    @http.domain.should == 's3.amazonaws.com'
+    @http.host.should == 's3.amazonaws.com'
     Presss.config[:region] = 'us-east-1'
-    @http.domain.should == 's3.amazonaws.com'
+    @http.host.should == 's3.amazonaws.com'
     Presss.config[:region] = 'eu-west-1'
-    @http.domain.should == 's3-eu-west-1.amazonaws.com'
+    @http.host.should == 's3-eu-west-1.amazonaws.com'
   end
 end
