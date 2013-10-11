@@ -175,7 +175,6 @@ class Presss
     # the content-type if you want to set a specific one.
     def put(path, file, content_type=nil)
       path = canonicalized_resource(path)
-      path = absolute_path(path)
       body = file.respond_to?(:read) ? file : file.to_s 
       date = Time.now.rfc2822
       message = join('PUT', body, content_type, date, nil, path)
