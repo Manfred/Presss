@@ -10,8 +10,8 @@ You can install Presss as a Rubygem or directly from the Git repository if you p
 
 You start by configuring Presss globally to use a certain bucket in a region with your credentials.
 
-	Presss.config = {
-	  region: 'eu-west-1',
+    Presss.config = {
+      region: 'eu-west-1',
       bucket_name: 'my-bucket-name',
       access_key_id: 'access key ID',
       secret_access_key: 'access key secret'
@@ -35,6 +35,12 @@ The `get` methods downloads the remote object and stores it in a string. Like wi
 
     Presss.get('books/12/as6745it.zip')
 
+## Authors
+
+* Manfred Stienstra
+* Jeff Kreeftmeijer
+* Eric Lindvall
+
 ## Copying
 
-Presss is freely distributable under the terms of an MIT-style license. See COPYING or http://www.opensource.org/licenses/mit-license.php.
+Presss is freely distributable under the terms of an MIT-style license. See COPYING or http://www.opensource.org/licenses/mit-license.php. When you contribute code to this project we assume you share it with the same license.
