@@ -12,7 +12,14 @@ def report(message)
   puts message
 end
 
+require 'digest/md5'
+srand
+
 if File.exist?(remote_config_file)
+  def generate_key
+    "wads/#{Digest::MD5.hexdigest(rand(100).to_s + Time.now.to_s)}.zip"
+  end
+
   require 'logger'
 
   $:.unshift File.expand_path('../../../lib', __FILE__)
@@ -21,16 +28,22 @@ if File.exist?(remote_config_file)
   Presss.logger = Logger.new($stdout)
   Presss.config = YAML.load_file(remote_config_file)
 
-  key = 'wads/df45ui67.zip'
+  key_one = generate_key
+  key_two = generate_key
+
   filename = File.expand_path('../../fixtures/files/wads/df45ui67.zip', __FILE__)
-  result = Presss.put(key, open(filename))
+
+  result = Presss.put(key_one, File.read(filename))
   assert(result == true)
 
-  contents = Presss.get(key)
+  contents = Presss.get(key_one)
   assert(contents == 'THIS IS A ZIP')
 
+  result = Presss.put(key_two, open(filename))
+  assert(result == true)
+
   contents = ''
-  Presss.get(key) { |segment| contents << segment }
+  Presss.get(key_two) { |segment| contents << segment }
   assert(contents == 'THIS IS A ZIP')
 else
 
